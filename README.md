@@ -2,6 +2,10 @@
 
 A full-stack weather search application that allows users to search for current weather information by city name. Built with **Java Spring Boot** backend and **React** frontend, featuring intelligent caching for improved performance.
 
+# Preview Link
+https://youtu.be/u-SFnOlhaTI
+
+
 ## 🌟 Features
 
 ### Backend (Java Spring Boot)
