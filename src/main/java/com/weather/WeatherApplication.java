@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 public class WeatherApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(WeatherApplication.class, args);
         System.out.println("\n===========================================");
         System.out.println("Weather Search Service Started Successfully");

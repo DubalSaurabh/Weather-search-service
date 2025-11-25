@@ -160,10 +160,10 @@ function App() {
                         <div className="weather-header">
                             <div className="city-info">
                                 <h2 className="city-name">
-                                    {weather.cityName}, {weather.system.country}
+                                    {weather.cityName || weather.name}{weather.system?.country ? `, ${weather.system.country}` : ''}
                                 </h2>
                                 <p className="coordinates">
-                                    📍 {weather.coordinates.latitude.toFixed(2)}°, {weather.coordinates.longitude.toFixed(2)}°
+                                     {weather.coordinates?.latitude?.toFixed(2) || weather.coord?.lat?.toFixed(2)}°, {weather.coordinates?.longitude?.toFixed(2) || weather.coord?.lon?.toFixed(2)}°
                                 </p>
                             </div>
                             {cached && (
@@ -173,22 +173,26 @@ function App() {
 
                         <div className="weather-main">
                             <div className="weather-icon-section">
-                                <img
-                                    src={getWeatherIcon(weather.weather[0].icon)}
-                                    alt={weather.weather[0].description}
-                                    className="weather-icon"
-                                />
-                                <p className="weather-description">
-                                    {weather.weather[0].description}
-                                </p>
+                                {weather.weather?.[0] && (
+                                    <>
+                                        <img
+                                            src={getWeatherIcon(weather.weather[0].icon)}
+                                            alt={weather.weather[0].description}
+                                            className="weather-icon"
+                                        />
+                                        <p className="weather-description">
+                                            {weather.weather[0].description}
+                                        </p>
+                                    </>
+                                )}
                             </div>
 
                             <div className="temperature-section">
                                 <div className="temperature">
-                                    {Math.round(weather.main.temperature)}°C
+                                    {Math.round(weather.main?.temperature || weather.main?.temp)}°C
                                 </div>
                                 <div className="feels-like">
-                                    Feels like {Math.round(weather.main.feelsLike)}°C
+                                    Feels like {Math.round(weather.main?.feelsLike || weather.main?.feels_like)}°C
                                 </div>
                             </div>
                         </div>
@@ -199,7 +203,7 @@ function App() {
                                 <div className="detail-content">
                                     <div className="detail-label">Min / Max</div>
                                     <div className="detail-value">
-                                        {Math.round(weather.main.tempMin)}° / {Math.round(weather.main.tempMax)}°
+                                        {Math.round(weather.main?.tempMin || weather.main?.temp_min)}° / {Math.round(weather.main?.tempMax || weather.main?.temp_max)}°
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +212,7 @@ function App() {
                                 <div className="detail-icon">💧</div>
                                 <div className="detail-content">
                                     <div className="detail-label">Humidity</div>
-                                    <div className="detail-value">{weather.main.humidity}%</div>
+                                    <div className="detail-value">{weather.main?.humidity}%</div>
                                 </div>
                             </div>
 
@@ -216,7 +220,7 @@ function App() {
                                 <div className="detail-icon">💨</div>
                                 <div className="detail-content">
                                     <div className="detail-label">Wind Speed</div>
-                                    <div className="detail-value">{weather.wind.speed} m/s</div>
+                                    <div className="detail-value">{weather.wind?.speed} m/s</div>
                                 </div>
                             </div>
 
@@ -224,7 +228,7 @@ function App() {
                                 <div className="detail-icon">🧭</div>
                                 <div className="detail-content">
                                     <div className="detail-label">Wind Direction</div>
-                                    <div className="detail-value">{weather.wind.degrees}°</div>
+                                    <div className="detail-value">{weather.wind?.degrees || weather.wind?.deg}°</div>
                                 </div>
                             </div>
 
@@ -232,7 +236,7 @@ function App() {
                                 <div className="detail-icon">🔽</div>
                                 <div className="detail-content">
                                     <div className="detail-label">Pressure</div>
-                                    <div className="detail-value">{weather.main.pressure} hPa</div>
+                                    <div className="detail-value">{weather.main?.pressure} hPa</div>
                                 </div>
                             </div>
 
@@ -240,7 +244,7 @@ function App() {
                                 <div className="detail-icon">👁️</div>
                                 <div className="detail-content">
                                     <div className="detail-label">Visibility</div>
-                                    <div className="detail-value">{(weather.visibility / 1000).toFixed(1)} km</div>
+                                    <div className="detail-value">{weather.visibility ? (weather.visibility / 1000).toFixed(1) : 'N/A'} km</div>
                                 </div>
                             </div>
 
@@ -248,25 +252,29 @@ function App() {
                                 <div className="detail-icon">☁️</div>
                                 <div className="detail-content">
                                     <div className="detail-label">Cloudiness</div>
-                                    <div className="detail-value">{weather.clouds.all}%</div>
+                                    <div className="detail-value">{weather.clouds?.all}%</div>
                                 </div>
                             </div>
 
-                            <div className="detail-card">
-                                <div className="detail-icon">🌅</div>
-                                <div className="detail-content">
-                                    <div className="detail-label">Sunrise</div>
-                                    <div className="detail-value">{formatTime(weather.system.sunrise)}</div>
+                            {weather.system?.sunrise && (
+                                <div className="detail-card">
+                                    <div className="detail-icon">🌅</div>
+                                    <div className="detail-content">
+                                        <div className="detail-label">Sunrise</div>
+                                        <div className="detail-value">{formatTime(weather.system.sunrise)}</div>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
-                            <div className="detail-card">
-                                <div className="detail-icon">🌇</div>
-                                <div className="detail-content">
-                                    <div className="detail-label">Sunset</div>
-                                    <div className="detail-value">{formatTime(weather.system.sunset)}</div>
+                            {weather.system?.sunset && (
+                                <div className="detail-card">
+                                    <div className="detail-icon">🌇</div>
+                                    <div className="detail-content">
+                                        <div className="detail-label">Sunset</div>
+                                        <div className="detail-value">{formatTime(weather.system.sunset)}</div>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 )}
